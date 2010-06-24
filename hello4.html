@@ -11,9 +11,14 @@
 	  <script language="JavaScript">
 	  
 		var G_CANVAS_SIZE = 400;
-		var G_ANIMATE_TIME = 300;
+		var G_ANIMATE_TIME = 100;
 		var G_SNAKE_SIZE = 10;
-		
+
+		var G_KEY = { right : 39, left : 37, up : 38, down : 40};
+
+		var gKey;
+		var gGameStarted = false;
+
 		var paper = Raphael(document.getElementById("snake"), G_CANVAS_SIZE+1, G_CANVAS_SIZE+1);
 		var border = paper.rect(0, 0, G_CANVAS_SIZE,  G_CANVAS_SIZE);
 		border.attr("stroke", "#000");
@@ -31,7 +36,7 @@
 				.attr("fill", "#000")
 				.attr("stroke", "#000");
 		}
-		
+
 		/*Place a random block on the canvas*/
 		generateBlock();
 		
@@ -56,13 +61,18 @@
 			key = event.keyCode;
 			//document.getElementById("Code").innerHTML = superSnake[i].direction;
 			
-			if (key == 39 || key == 38 || key ==40 || key ==37)				//Detecting a change in direction
-			{				
-				moveBody(key);
+			if (key == G_KEY.right || key == G_KEY.left || key == G_KEY.up || key == G_KEY.down) //Detecting a change in direction
+			{
+				gKey = key;
+				if (!gGameStarted)
+				{
+					gGameStarted = true;
+					moveBody();
+				}	
 			}
 		}
 
-		function moveBody(key)
+		function moveBody()
 		{
 			var i = 0;	
 			while (i < superSnake.length-1)
@@ -74,51 +84,51 @@
 										
 				i++;
 			}
-			moveHead(key);
+			moveHead();
 		}
 		
 		
-		function moveHead(key)
+		function moveHead()
 		{
 			var headIndex = superSnake.length - 1;
-			if (key == 39)		//Right
+			if (gKey == G_KEY.right)		//Right
 			{
 				superSnake[headIndex].coord.x = superSnake[headIndex].coord.x + G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({x: superSnake[headIndex].coord.x}, G_ANIMATE_TIME, function() {
 					if (superSnake[headIndex].coord.x != G_CANVAS_SIZE - G_SNAKE_SIZE 
 						&& superSnake[headIndex].coord.y != G_SNAKE_SIZE)
 					{
-						moveBody(key);
+						moveBody();
 					}
 				});
 			}
-			else if (key == 38)		//Up
+			else if (gKey == G_KEY.up)		//Up
 			{
 				superSnake[headIndex].coord.y = superSnake[headIndex].coord.y - G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({y: superSnake[headIndex].coord.y}, G_ANIMATE_TIME, function() {
 					if ( superSnake[headIndex].coord.y >= G_SNAKE_SIZE)
 					{
-						moveBody(key);
+						moveBody();
 					}
 				});
 			}
-			else if (key == 37)		//Left
+			else if (gKey == G_KEY.left)		//Left
 			{
 				superSnake[headIndex].coord.x = superSnake[headIndex].coord.x - G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({x: superSnake[headIndex].coord.x}, G_ANIMATE_TIME, function() {
 					if (superSnake[headIndex].coord.x > 0)
 					{
-						moveBody(key);
+						moveBody();
 					}
 				});
 			}
-			else if (key == 40)		//Down
+			else if (gKey == G_KEY.down)		//Down
 			{
 				superSnake[headIndex].coord.y = superSnake[headIndex].coord.y + G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({y: superSnake[headIndex].coord.y}, G_ANIMATE_TIME, function() {
 					if (superSnake[headIndex].coord.y < (G_CANVAS_SIZE - G_SNAKE_SIZE))
 					{
-						moveBody(key);
+						moveBody();
 					}
 				});
 			}
