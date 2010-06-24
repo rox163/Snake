@@ -95,8 +95,7 @@
 			{
 				superSnake[headIndex].coord.x = superSnake[headIndex].coord.x + G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({x: superSnake[headIndex].coord.x}, G_ANIMATE_TIME, function() {
-					if (superSnake[headIndex].coord.x != G_CANVAS_SIZE - G_SNAKE_SIZE 
-						&& superSnake[headIndex].coord.y != G_SNAKE_SIZE)
+					if (superSnake[headIndex].coord.x < (G_CANVAS_SIZE - G_SNAKE_SIZE))
 					{
 						moveBody();
 					}
