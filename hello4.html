@@ -1,0 +1,117 @@
+<html>
+  <head>
+    <title>Snake</title>
+  <script language="JavaScript" src="raphael.js"> </script>
+  </head>
+  <body onkeydown="moveSnake()">
+    <div id="snake"> 
+    </div>
+    <p id="Code">
+	</p>
+	  <script language="JavaScript">
+	  
+		var G_CANVAS_SIZE = 400;
+		var G_ANIMATE_TIME = 300;
+		var G_SNAKE_SIZE = 10;
+		
+		var paper = Raphael(document.getElementById("snake"), G_CANVAS_SIZE+1, G_CANVAS_SIZE+1);
+		var border = paper.rect(0, 0, G_CANVAS_SIZE,  G_CANVAS_SIZE);
+		border.attr("stroke", "#000");
+
+		var superSnake = [];
+		
+
+				/*Initialise snake*/
+		superSnake.push({coord : {x : 0, y : G_CANVAS_SIZE - G_SNAKE_SIZE}}, 
+			{coord : {x : G_SNAKE_SIZE, y : G_CANVAS_SIZE - G_SNAKE_SIZE}},
+			{coord : {x : G_SNAKE_SIZE * 2, y : G_CANVAS_SIZE - G_SNAKE_SIZE}});
+
+		for (var count = 0;count < superSnake.length; count++)
+		{
+			superSnake[count].snake = paper.rect(superSnake[count].coord.x, superSnake[count].coord.y, G_SNAKE_SIZE, G_SNAKE_SIZE)
+				.attr("fill", "#000")
+				.attr("stroke", "#000");
+		}
+		
+		generateBlock();
+		
+		
+		function generateBlock()
+		{	
+			var randomLocation = { 
+				coord : { 
+					x : (Math.round((Math.floor(Math.random()*(G_CANVAS_SIZE-G_SNAKE_SIZE + 1)))/G_SNAKE_SIZE))*G_SNAKE_SIZE,
+					y : (Math.round((Math.floor(Math.random()*(G_CANVAS_SIZE-G_SNAKE_SIZE + 1)))/G_SNAKE_SIZE))*G_SNAKE_SIZE 
+				}
+			};
+			
+			randomLocation.block = paper.rect(randomLocation.coord.x, randomLocation.coord.y, G_SNAKE_SIZE, G_SNAKE_SIZE)
+				.attr("fill", "#000")
+				.attr("stroke", "#000");
+		}
+		
+		/*Move snake */
+		function moveSnake()
+		{			
+			key = event.keyCode;
+			//document.getElementById("Code").innerHTML = superSnake[i].direction;
+	
+			if (key == 39 || key == 38 || key ==40 || key ==37)				//Detecting a change in direction
+			{				
+				moveBody(key);
+			}
+		}
+
+		function moveBody(key)
+		{
+			var i = 0;	
+			while (i < superSnake.length-1)
+			{					
+				superSnake[i].coord.y = superSnake[i + 1].coord.y;
+				superSnake[i].coord.x = superSnake[i + 1].coord.x;
+				
+				superSnake[i].snake.animate({x:superSnake[i].coord.x,y: superSnake[i].coord.y}, G_ANIMATE_TIME);
+										
+				i++;
+			}
+			moveHead(key);
+		}
+		
+		
+		function moveHead(key)
+		{
+			var headIndex = superSnake.length - 1;
+			if (key == 39)		//Right
+			{
+				superSnake[headIndex].coord.x = superSnake[headIndex].coord.x + G_SNAKE_SIZE;
+				superSnake[headIndex].snake.animate({x: superSnake[headIndex].coord.x}, G_ANIMATE_TIME, function() {
+					moveBody(key);
+				});
+			}
+			else if (key == 38)		//Up
+			{
+				superSnake[headIndex].coord.y = superSnake[headIndex].coord.y - G_SNAKE_SIZE;
+				superSnake[headIndex].snake.animate({y: superSnake[headIndex].coord.y}, G_ANIMATE_TIME, function() {
+					moveBody(key);
+				});
+			}
+			else if (key == 37)		//Left
+			{
+				superSnake[headIndex].coord.x = superSnake[headIndex].coord.x - G_SNAKE_SIZE;
+				superSnake[headIndex].snake.animate({x: superSnake[headIndex].coord.x}, G_ANIMATE_TIME, function() {
+					moveBody(key);
+				});
+			}
+			else if (key == 40)		//Down
+			{
+				superSnake[headIndex].coord.y = superSnake[headIndex].coord.y + G_SNAKE_SIZE;
+				superSnake[headIndex].snake.animate({y: superSnake[headIndex].coord.y}, G_ANIMATE_TIME, function() {
+					moveBody(key);
+				});
+			}
+		}
+		
+
+	  </script>
+  </body>
+</html>

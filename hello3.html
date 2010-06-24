@@ -1,0 +1,140 @@
+<html>
+  <head>
+    <title>Snake</title>
+  <script language="JavaScript" src="raphael.js"> </script>
+  </head>
+  <body onkeydown="moveSnake()">
+    <div id="snake"> 
+    </div>
+    <p id="Code">
+	</p>
+	  <script language="JavaScript">
+		var paper = Raphael(document.getElementById("snake"), 401, 401);
+		var border = paper.rect(0, 0, 400,  400);
+		border.attr("stroke", "#000");
+
+		var superSnake = [];
+
+		/*Initialise snake*/
+		superSnake.push({coord : {x : 0, y : 390}}, 
+			{coord : {x : 10, y : 390}},
+			{coord : {x : 20, y : 390}},
+			{coord : {x : 30, y : 390}} );
+
+		for (var count = 0;count < superSnake.length; count++)
+		{
+			superSnake[count].snake = paper.rect(superSnake[count].coord.x, superSnake[count].coord.y, 10, 10)
+				.attr("fill", "#000")
+				.attr("stroke", "#000");
+		}
+		
+		generateBlock();
+		
+		
+		function generateBlock()
+		{
+			random_coordx = (Math.round((Math.floor(Math.random()*391))/10))*10;
+			random_coordy = (Math.round((Math.floor(Math.random()*391))/10))*10;
+			
+			var random_block = paper.rect(random_coordx,random_coordy,10,10)
+				.attr("fill", "#000")
+				.attr("stroke", "#000");
+		}
+		
+		/*Move snake */
+
+		function moveSnake()
+		{
+			var i = 0;
+			
+			key = event.keyCode;
+			//document.getElementById("Code").innerHTML = superSnake[i].direction;
+								
+							
+			if (key == 39)				//Change to go RIGHT
+			{
+				while (i < superSnake.length-1)
+				{					
+					superSnake[i].coord.y = superSnake[i+1].coord.y;
+					superSnake[i].coord.x = superSnake[i+1].coord.x;
+					
+					superSnake[i].snake.animate({x:superSnake[i].coord.x,y: superSnake[i].coord.y}, 400);
+											
+					i++;
+				}
+				superSnake[i].snake.animate({x:moveSnakeRight(i)},400);
+			}
+			
+			else if (key == 38)				//CHange to go UP
+			{
+				while (i < superSnake.length-1)
+				{					
+					superSnake[i].coord.y = superSnake[i+1].coord.y;
+					superSnake[i].coord.x = superSnake[i+1].coord.x;
+					
+					superSnake[i].snake.animate({x:superSnake[i].coord.x,y: superSnake[i].coord.y}, 400);
+															
+					i++;
+				}
+				superSnake[i].snake.animate({y:moveSnakeUp(i)},400);
+									
+			}
+			
+			else if (key ==40)			//Change to go DOWN
+			{
+				while (i < superSnake.length-1)
+				{
+					superSnake[i].coord.y = superSnake[i+1].coord.y;
+					superSnake[i].coord.x = superSnake[i+1].coord.x;
+					
+					superSnake[i].snake.animate({x:superSnake[i].coord.x,y: superSnake[i].coord.y}, 400);
+																
+					i++;
+				}
+				superSnake[i].snake.animate({y: moveSnakeDown(i)}, 400);
+									
+			}
+			else if (key==37)		//Change to go LEFT
+			{
+			
+				while (i < superSnake.length-1)
+				{
+					superSnake[i].coord.y = superSnake[i+1].coord.y;
+					superSnake[i].coord.x = superSnake[i+1].coord.x;
+					
+					superSnake[i].snake.animate({x:superSnake[i].coord.x,y: superSnake[i].coord.y}, 400);
+																
+					i++;
+				}
+				superSnake[i].snake.animate({x: moveSnakeLeft(i)}, 400);	
+			}
+								
+		}
+
+		
+		function moveSnakeRight(j)
+		{
+			superSnake[j].coord.x = superSnake[j].coord.x + 10;
+			return superSnake[j].coord.x;
+			
+		}
+		
+		function moveSnakeUp(j)
+		{
+			superSnake[j].coord.y = superSnake[j].coord.y  - 10;
+			return superSnake[j].coord.y;
+		}
+		function moveSnakeLeft(j)
+		{
+			superSnake[j].coord.x = superSnake[j].coord.x - 10;
+			return superSnake[j].coord.x;
+		}
+		function moveSnakeDown(j)
+		{
+			superSnake[j].coord.y = superSnake[j].coord.y  + 10;
+			return superSnake[j].coord.y;
+		}
+
+	  </script>
+  </body>
+</html>
