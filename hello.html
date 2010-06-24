@@ -1,0 +1,121 @@
+<html>
+  <head>
+    <title>Snake</title>
+  <script language="JavaScript" src="raphael.js"> </script>
+  </head>
+  <body onkeydown="moveSnake()">
+    <div id="snake"> 
+    </div>
+    <p id="Code">
+	</p>
+	  <script language="JavaScript">
+		var paper = Raphael(document.getElementById("snake"), 401, 401);
+		var border = paper.rect(0, 0, 400,  400);
+		border.attr("stroke", "#000");
+
+		var superSnake = [];
+		var coord_x = [];
+		var coord_y = [];
+		var snake = [];
+		var direction = [];
+		
+		/*Initialise snake*/
+		var snake_x = 0;
+		var snake_y = 390;
+		
+		coord_x.push(snake_x,snake_x+10,snake_x+20);
+		coord_y.push(snake_y,snake_y,snake_y);
+		
+		direction.push("R","R","R");
+
+		for (var count = 0;count < 3; count++)
+		{
+			snake.push(paper.rect(coord_x[count], coord_y[count], 10, 10));
+			snake[count].attr("fill", "#000");
+			snake[count].attr("stroke", "#000");
+		}
+		
+		/*Move snake */
+		
+		function moveSnake()
+		{
+			var i = snake.length-1;
+			
+			key = event.keyCode;
+			document.getElementById("Code").innerHTML = direction[0].toString();
+								
+			//Going right						
+			if (key == 39)				
+			{
+				while (i >= 0)
+				{
+					if (direction[i].toString() == "R")
+					{
+						snake[i].animate({x: moveSnakeRight(i)}, 500);
+					}
+					i--;
+				}
+			}
+			//Going up
+			else if (key == 38)			
+			{
+				//If its already going up 
+				while (i >= 0)
+				{					
+					if (direction[i].toString() == "U")	
+					{
+						snake[i].animate({y: moveSnakeUp(i)}, 500);
+					}					
+					else //if (direction[0].toString() == "R")	
+					{
+						snake[i].animate({y: moveSnakeUp(i)},500);
+						direction[i] = "U";
+						remainder = i-1;
+						while (remainder>=0)
+						{
+							snake[remainder].animate({x: moveSnakeRight(remainder)}, 500);
+							remainder--;
+						}
+						
+					}
+					i--;
+				}
+			}
+			
+			else if (key ==40)
+			{
+				snake[i].animate({y: moveSnakeDown(i)}, 500);
+			}
+			else if (key==37)
+			{
+				snake[i].animate({x: moveSnakeLeft(i)}, 500);
+			}
+								
+		}
+
+		function moveSnakeRight(j)
+		{
+			coord_x[j] = coord_x[j] + 10;
+			return coord_x[j];
+			
+		}
+		
+		function moveSnakeUp(j)
+		{
+			coord_y[j] = coord_y[j]  - 10;
+			return coord_y[j];
+		}
+		function moveSnakeLeft()
+		{
+			coord_x[j] = coord_x[j] - 10;
+			return coord_x[j];
+		}
+		function moveSnakeDown(j)
+		{
+			coord_y[j] = coord_y[j]  + 10;
+			return coord_y[j];
+		}
+
+	  </script>
+  </body>
+</html>

@@ -1,0 +1,277 @@
+<html>
+  <head>
+    <title>Snake</title>
+  <script language="JavaScript" src="raphael.js"> </script>
+  </head>
+  <body onkeydown="moveSnake()">
+    <div id="snake"> 
+    </div>
+    <p id="Code">
+	</p>
+	<div id="code2">
+	</div>
+	  <script language="JavaScript">
+		var paper = Raphael(document.getElementById("snake"), 401, 401);
+		var border = paper.rect(0, 0, 400,  400);
+		border.attr("stroke", "#000");
+
+		var superSnake = [];
+
+		/*Initialise snake*/
+		superSnake.push({coord_x : 0, coord_y : 390, direction : "R"}, 
+			{coord_x : 10, coord_y : 390, direction : "R"},
+			{coord_x : 20, coord_y : 390, direction : "R"});
+
+		for (var count = 0;count < superSnake.length; count++)
+		{
+			superSnake[count].snake = paper.rect(superSnake[count].coord_x, superSnake[count].coord_y, 10, 10)
+				.attr("fill", "#000")
+				.attr("stroke", "#000");
+		}
+		
+		/*Move snake */
+
+		function moveSnake()
+		{
+			var i = superSnake.length-1;
+			
+			key = event.keyCode;
+			document.getElementById("Code").innerHTML = superSnake[i].direction;
+								
+							
+			if (key == 39)				//Change to go RIGHT
+			{
+				while (i >= 0)
+				{
+					//already going right
+					if (superSnake[i].direction.toString() == "R")
+					{
+						superSnake[i].snake.animate({x: moveSnakeRight(i)}, 400);
+					}
+					else 		//not going right
+					{
+						//move the head right
+						if (i == (superSnake.length-1))
+						{
+							superSnake[i].snake.animate({x: moveSnakeRight(i)},400);
+							superSnake[i].direction = "R";
+						}
+						else
+						{
+							
+							if (superSnake[i].direction == "U")
+							{
+								superSnake[i].snake.animate({y: moveSnakeUp(i)}, 500);
+								if (superSnake[i+1].coord_y == superSnake[i].coord_y)
+								{
+									superSnake[i].direction = "R";
+								}
+							}
+							else if (superSnake[i].direction == "D")
+							{
+								superSnake[i].snake.animate({y: moveSnakeDown(i)}, 400);
+								if (superSnake[i+1].coord_y == superSnake[i].coord_y)
+								{
+									superSnake[i].direction = "R";
+								}
+							}
+							else if (superSnake[i].direction =="L")
+							{
+								superSnake[i].snake.animate({x:moveSnakeLeft(i)},400);
+								if (superSnake[i+1].coord_x == superSnake[i].coord_x)
+								{
+									superSnake[i].direction = "U";
+								}
+							}
+								
+						}
+					}
+					document.getElementById("code2").innerHTML = superSnake[i].direction;
+					i--;
+				}
+			}
+			
+			else if (key == 38)				//CHange to go UP
+			{
+				
+				while (i >= 0)
+				{	
+					//If its already going up 				
+					if (superSnake[i].direction.toString() == "U")	
+					{
+						superSnake[i].snake.animate({y: moveSnakeUp(i)}, 400);
+					}					
+					else //if (direction[0].toString() == R/L)	
+					{
+						//move the head UP
+						if (i == (superSnake.length-1))
+						{
+							superSnake[i].snake.animate({y: moveSnakeUp(i)},400);
+							superSnake[i].direction = "U";
+						}
+						else
+						{
+							if (superSnake[i].direction == "R")
+							{
+								var turn_dir = "R";
+								superSnake[i].snake.animate({x: moveSnakeRight(i)}, 400);
+								if (superSnake[i+1].coord_x == superSnake[i].coord_x)
+								{
+									superSnake[i].direction = "U";
+								}
+							}
+							else if (superSnake[i].direction == "L")
+							{
+								var turn_dir = "L";
+								superSnake[i].snake.animate({x: moveSnakeLeft(i)}, 400);
+								if (superSnake[i+1].coord_x == superSnake[i].coord_x)
+								{
+									superSnake[i].direction = "U";
+								}
+							}
+							else if (superSnake[i].direction =="D")
+							{
+								superSnake[i].snake.animate({y: moveSnakeDown(i)},400);
+								
+								if(superSnake[i+1].coord_y == superSnake[i].coord_y)
+								{
+									superSnake[i].direction = turn_dir;
+								}
+							}
+						}						
+					}
+					document.getElementById("code2").innerHTML = superSnake[i].direction;
+					i--;
+				}
+			}
+			
+			else if (key ==40)			//Change to go DOWN
+			{
+				while (i >= 0)
+				{
+					if (superSnake[i].direction.toString() == "D")
+					{
+						superSnake[i].snake.animate({y: moveSnakeDown(i)}, 400);
+					}
+					else //if (direction[i].toString() == R/L/u)	
+					{
+						if (i == (superSnake.length-1))
+						{
+							superSnake[i].snake.animate({y: moveSnakeDown(i)},400);
+							superSnake[i].direction = "D";
+						}
+						else
+						{
+							if (superSnake[i].direction == "R")
+							{
+								var turn_dir = "R";
+								
+								superSnake[i].snake.animate({x: moveSnakeRight(i)}, 400);
+								if (superSnake[i+1].coord_x == superSnake[i].coord_x)
+								{
+									superSnake[i].direction = "D";
+								}
+							}
+							else if (superSnake[i].direction == "L")
+							{
+								var turn_dir = "L";
+								
+								superSnake[i].snake.animate({x: moveSnakeLeft(i)}, 400);
+								if (superSnake[i+1].coord_x == superSnake[i].coord_x)
+								{
+									superSnake[i].direction = "D";
+								}
+							}
+							else if (superSnake[i].direction =="U")
+							{
+								superSnake[i].snake.animate({y: moveSnakeUp(i)},400);
+								
+								if(superSnake[i+1].coord_y == superSnake[i].coord_y)
+								{
+									superSnake[i].direction = turn_dir;
+								}
+							}
+						}						
+					}
+					
+					i--;
+				}
+			}
+			else if (key==37)		//Change to go LEFT
+			{
+				while (i >= 0)
+				{
+					if (superSnake[i].direction.toString() == "L")
+					{
+						superSnake[i].snake.animate({x: moveSnakeLeft(i)}, 500);
+					}
+					else
+					{
+						//move the head  LEFT
+						if (i == (superSnake.length-1))		
+						{
+							superSnake[i].snake.animate({x: moveSnakeLeft(i)},400);
+							superSnake[i].direction = "L";
+						}
+						else
+						{
+							if (superSnake[i].direction == "U")
+							{
+								superSnake[i].snake.animate({y: moveSnakeUp(i)}, 400);
+								if (superSnake[i+1].coord_y == superSnake[i].coord_y)
+								{
+									superSnake[i].direction = "L";
+								}
+							}
+							else if (superSnake[i].direction == "D")
+							{
+								superSnake[i].snake.animate({y: moveSnakeDown(i)}, 400);
+								if (superSnake[i+1].coord_y == superSnake[i].coord_y)
+								{
+									superSnake[i].direction = "L";
+								}
+							}
+							else if (superSnake[i].direction =="R")
+							{
+								superSnake[i].snake.animate({x:moveSnakeRight(i)},400);
+								if (superSnake[i+1].coord_x == superSnake[i].coord_x)
+								{
+									superSnake[i].direction = "U";
+								}
+							}
+						}
+					}
+				
+					i--;
+				}
+			}
+			
+								
+		}
+
+		function moveSnakeRight(j)
+		{
+			superSnake[j].coord_x = superSnake[j].coord_x + 10;
+			return superSnake[j].coord_x;
+			
+		}
+		
+		function moveSnakeUp(j)
+		{
+			superSnake[j].coord_y = superSnake[j].coord_y  - 10;
+			return superSnake[j].coord_y;
+		}
+		function moveSnakeLeft(j)
+		{
+			superSnake[j].coord_x = superSnake[j].coord_x - 10;
+			return superSnake[j].coord_x;
+		}
+		function moveSnakeDown(j)
+		{
+			superSnake[j].coord_y = superSnake[j].coord_y  + 10;
+			return superSnake[j].coord_y;
+		}
+
+	  </script>
+  </body>
+</html>
