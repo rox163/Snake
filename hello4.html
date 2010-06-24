@@ -85,28 +85,41 @@
 			{
 				superSnake[headIndex].coord.x = superSnake[headIndex].coord.x + G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({x: superSnake[headIndex].coord.x}, G_ANIMATE_TIME, function() {
-					moveBody(key);
+					if (superSnake[headIndex].coord.x != G_CANVAS_SIZE - G_SNAKE_SIZE 
+						&& superSnake[headIndex].coord.y != G_SNAKE_SIZE)
+					{
+						moveBody(key);
+					}
 				});
 			}
 			else if (key == 38)		//Up
 			{
 				superSnake[headIndex].coord.y = superSnake[headIndex].coord.y - G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({y: superSnake[headIndex].coord.y}, G_ANIMATE_TIME, function() {
-					moveBody(key);
+					if ( superSnake[headIndex].coord.y >= G_SNAKE_SIZE)
+					{
+						moveBody(key);
+					}
 				});
 			}
 			else if (key == 37)		//Left
 			{
 				superSnake[headIndex].coord.x = superSnake[headIndex].coord.x - G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({x: superSnake[headIndex].coord.x}, G_ANIMATE_TIME, function() {
-					moveBody(key);
+					if (superSnake[headIndex].coord.x > 0)
+					{
+						moveBody(key);
+					}
 				});
 			}
 			else if (key == 40)		//Down
 			{
 				superSnake[headIndex].coord.y = superSnake[headIndex].coord.y + G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({y: superSnake[headIndex].coord.y}, G_ANIMATE_TIME, function() {
-					moveBody(key);
+					if (superSnake[headIndex].coord.y < (G_CANVAS_SIZE - G_SNAKE_SIZE))
+					{
+						moveBody(key);
+					}
 				});
 			}
 		}
