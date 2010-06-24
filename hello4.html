@@ -18,10 +18,9 @@
 		var border = paper.rect(0, 0, G_CANVAS_SIZE,  G_CANVAS_SIZE);
 		border.attr("stroke", "#000");
 
+		/*Initialise snake*/
 		var superSnake = [];
-		
 
-				/*Initialise snake*/
 		superSnake.push({coord : {x : 0, y : G_CANVAS_SIZE - G_SNAKE_SIZE}}, 
 			{coord : {x : G_SNAKE_SIZE, y : G_CANVAS_SIZE - G_SNAKE_SIZE}},
 			{coord : {x : G_SNAKE_SIZE * 2, y : G_CANVAS_SIZE - G_SNAKE_SIZE}});
@@ -33,6 +32,7 @@
 				.attr("stroke", "#000");
 		}
 		
+		/*Place a random block on the canvas*/
 		generateBlock();
 		
 		
@@ -55,7 +55,7 @@
 		{			
 			key = event.keyCode;
 			//document.getElementById("Code").innerHTML = superSnake[i].direction;
-	
+			
 			if (key == 39 || key == 38 || key ==40 || key ==37)				//Detecting a change in direction
 			{				
 				moveBody(key);
