@@ -8,10 +8,16 @@
     </div>
     <p id="Code">
 	</p>
+	<p id="Code2">
+	</p>
+	<p id="Code3">
+	</p>
+	<p id="Code4">
+	</p>
 	  <script language="JavaScript">
 	  
 		var G_CANVAS_SIZE = 400;
-		var G_ANIMATE_TIME = 100;
+		var G_ANIMATE_TIME = 300;
 		var G_SNAKE_SIZE = 10;
 
 		var G_KEY = { right : 39, left : 37, up : 38, down : 40};
@@ -25,6 +31,7 @@
 
 		/*Initialise snake*/
 		var superSnake = [];
+		var randomLocation = new Object;
 
 		superSnake.push({coord : {x : 0, y : G_CANVAS_SIZE - G_SNAKE_SIZE}}, 
 			{coord : {x : G_SNAKE_SIZE, y : G_CANVAS_SIZE - G_SNAKE_SIZE}},
@@ -39,16 +46,16 @@
 
 		/*Place a random block on the canvas*/
 		generateBlock();
-		
-		
+				
 		function generateBlock()
 		{	
-			var randomLocation = { 
+			randomLocation = { 
 				coord : { 
-					x : (Math.round((Math.floor(Math.random()*(G_CANVAS_SIZE-G_SNAKE_SIZE + 1)))/G_SNAKE_SIZE))*G_SNAKE_SIZE,
-					y : (Math.round((Math.floor(Math.random()*(G_CANVAS_SIZE-G_SNAKE_SIZE + 1)))/G_SNAKE_SIZE))*G_SNAKE_SIZE 
+					x : (Math.round((Math.floor(Math.random() * (G_CANVAS_SIZE-G_SNAKE_SIZE + 1)))/G_SNAKE_SIZE)) * G_SNAKE_SIZE,
+					y : (Math.round((Math.floor(Math.random() * (G_CANVAS_SIZE-G_SNAKE_SIZE + 1)))/G_SNAKE_SIZE)) * G_SNAKE_SIZE 
 				}
 			};
+			
 			
 			randomLocation.block = paper.rect(randomLocation.coord.x, randomLocation.coord.y, G_SNAKE_SIZE, G_SNAKE_SIZE)
 				.attr("fill", "#000")
@@ -91,10 +98,12 @@
 		function moveHead()
 		{
 			var headIndex = superSnake.length - 1;
+			
 			if (gKey == G_KEY.right)		//Right
 			{
 				superSnake[headIndex].coord.x = superSnake[headIndex].coord.x + G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({x: superSnake[headIndex].coord.x}, G_ANIMATE_TIME, function() {
+					grow(headIndex);
 					if (superSnake[headIndex].coord.x < (G_CANVAS_SIZE - G_SNAKE_SIZE))
 					{
 						moveBody();
@@ -105,7 +114,8 @@
 			{
 				superSnake[headIndex].coord.y = superSnake[headIndex].coord.y - G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({y: superSnake[headIndex].coord.y}, G_ANIMATE_TIME, function() {
-					if ( superSnake[headIndex].coord.y >= G_SNAKE_SIZE)
+					grow(headIndex);
+					if (superSnake[headIndex].coord.y >= G_SNAKE_SIZE)
 					{
 						moveBody();
 					}
@@ -115,6 +125,7 @@
 			{
 				superSnake[headIndex].coord.x = superSnake[headIndex].coord.x - G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({x: superSnake[headIndex].coord.x}, G_ANIMATE_TIME, function() {
+					grow(headIndex);
 					if (superSnake[headIndex].coord.x > 0)
 					{
 						moveBody();
@@ -125,11 +136,31 @@
 			{
 				superSnake[headIndex].coord.y = superSnake[headIndex].coord.y + G_SNAKE_SIZE;
 				superSnake[headIndex].snake.animate({y: superSnake[headIndex].coord.y}, G_ANIMATE_TIME, function() {
+					grow(headIndex);
 					if (superSnake[headIndex].coord.y < (G_CANVAS_SIZE - G_SNAKE_SIZE))
 					{
 						moveBody();
 					}
 				});
+			}
+			
+		}
+		
+		function grow(headIndex)
+		{
+			if ((superSnake[headIndex].coord.x == randomLocation.coord.x) 
+				&& superSnake[headIndex].coord.y == randomLocation.coord.y)
+			{
+					document.getElementById("Code").innerHTML = randomLocation.coord.x; 		////
+					document.getElementById("Code2").innerHTML = randomLocation.coord.y;
+		
+				superSnake.push({coord : {x : randomLocation.coord.x, y : randomLocation.coord.y}});
+				superSnake[headIndex+1].snake = paper.rect(superSnake[headIndex+1].coord.x, superSnake[headIndex+1].coord.y, G_SNAKE_SIZE, G_SNAKE_SIZE)
+					.attr("fill", "#000")
+					.attr("stroke", "#000");
+				
+				
+				generateBlock();
 			}
 		}
 
