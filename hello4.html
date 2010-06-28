@@ -2,9 +2,10 @@
   <head>
     <title>Snake</title>
   <script language="JavaScript" src="raphael.js"> </script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
   </head>
-  <body onkeydown="moveSnake()">
-    <div id="snake"> 
+  <body >
+    <div id="snake" tabindex = 0> 
     </div>
     <p id="Score">
 	</p>
@@ -12,7 +13,7 @@
 	</p>
 	<p id="Code2">
 	</p>
-	<script language="JavaScript">
+	<script tyoe="text/javascript">
 		var G_CANVAS_SIZE = 400;
 		var G_SNAKE_SIZE = 10;
 		var G_SCORE_INCREMENT = 10;
@@ -30,7 +31,7 @@
 		/*Initialise snake*/
 		var superSnake = [];
 		var randomLocation = new Object;
-
+		
 		superSnake.push({coord : {x : 0, y : G_CANVAS_SIZE - G_SNAKE_SIZE}}, 
 			{coord : {x : G_SNAKE_SIZE, y : G_CANVAS_SIZE - G_SNAKE_SIZE}},
 			{coord : {x : G_SNAKE_SIZE * 2, y : G_CANVAS_SIZE - G_SNAKE_SIZE}});
@@ -42,6 +43,23 @@
 				.attr("stroke", "#000");
 		}
 
+				/*Move snake */
+		$(document).keypress(function (e)
+		{		
+			var key = e.keyCode;
+			document.getElementById("Code").innerHTML = key;
+			
+			if (e.keyCode == G_KEY.right || key == G_KEY.left || key == G_KEY.up || key == G_KEY.down) //Detecting a change in direction
+			{
+				gKey = key;
+				if (!gGameStarted)
+				{
+					gGameStarted = true;
+					moveBody();
+				}	
+			}
+		});
+		
 		/*Place a random block on the canvas*/
 		generateBlock();
 				
@@ -59,22 +77,7 @@
 				.attr("stroke", "#000");
 		}
 		
-		/*Move snake */
-		function moveSnake()
-		{			
-			key = event.keyCode;
-			//document.getElementById("Code").innerHTML = ;
-			
-			if (key == G_KEY.right || key == G_KEY.left || key == G_KEY.up || key == G_KEY.down) //Detecting a change in direction
-			{
-				gKey = key;
-				if (!gGameStarted)
-				{
-					gGameStarted = true;
-					moveBody();
-				}	
-			}
-		}
+
 
 		function moveBody()
 		{
