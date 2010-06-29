@@ -2,7 +2,7 @@
   <head>
     <title>Snake</title>
   <script language="JavaScript" src="raphael.js"> </script>
-  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.js"></script>
   </head>
   <body >
     <div id="snake" tabindex = 0> 
@@ -13,7 +13,7 @@
 	</p>
 	<p id="Code2">
 	</p>
-	<script tyoe="text/javascript">
+	<script type="text/javascript">
 		var G_CANVAS_SIZE = 400;
 		var G_SNAKE_SIZE = 10;
 		var G_SCORE_INCREMENT = 10;
@@ -44,12 +44,12 @@
 		}
 
 				/*Move snake */
-		$(document).keypress(function (e)
+		$(document).keydown(function (e)
 		{		
-			var key = e.keyCode;
+			var key = e.which;
 			document.getElementById("Code").innerHTML = key;
 			
-			if (e.keyCode == G_KEY.right || key == G_KEY.left || key == G_KEY.up || key == G_KEY.down) //Detecting a change in direction
+			if (key == G_KEY.right || key == G_KEY.left || key == G_KEY.up || key == G_KEY.down) //Detecting a change in direction
 			{
 				gKey = key;
 				if (!gGameStarted)
