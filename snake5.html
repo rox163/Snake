@@ -1,0 +1,252 @@
+<html>
+  <head>
+    <title>Snake</title>
+  <script language="JavaScript" src="raphael.js"> </script>
+  </head>
+  <body onkeydown="moveSnake()">
+    <div id="snake"> 
+    </div>
+    <p id="Score">
+	</p>
+	<p id="Code">
+	</p>
+	<p id="Code2">
+	</p>
+	<script language="JavaScript">
+		//changing snake colour
+    var G_CANVAS_SIZE = 400;
+    var G_SNAKE_SIZE = 10;
+    var G_SCORE_INCREMENT = 10;
+    var G_SPEED_INCREASE = 30;
+    var G_KEY = 
+    {
+        right: 39,
+        left: 37,
+        up: 38,
+        down: 40
+    };
+    var G_COLOURS = ["#000066", "#00FF00", "#00FF99", "#660000"];
+    
+    var gKey, gScore = 0;
+    var gAnimateTime = 400;
+    var gGameStarted = false;
+    
+    var gSuperSnake = [];
+    var randomLocation = new Object;
+    
+    /*Create canvas*/
+    var paper = Raphael(document.getElementById("snake"), G_CANVAS_SIZE + 1, G_CANVAS_SIZE + 1);
+    var border = paper.rect(0, 0, G_CANVAS_SIZE, G_CANVAS_SIZE).attr("stroke", "#000");
+    
+    
+    /*Initialise snake*/
+    gSuperSnake.push(
+    {
+        coord: 
+        {
+            x: 0,
+            y: G_CANVAS_SIZE - G_SNAKE_SIZE
+        }
+    }, 
+    {
+        coord: 
+        {
+            x: G_SNAKE_SIZE,
+            y: G_CANVAS_SIZE - G_SNAKE_SIZE
+        }
+    }, 
+    {
+        coord: 
+        {
+            x: G_SNAKE_SIZE * 2,
+            y: G_CANVAS_SIZE - G_SNAKE_SIZE
+        }
+    });
+    
+    for (var count = 0; count < gSuperSnake.length; count++) 
+    {
+        gSuperSnake[count].snake = paper.rect(gSuperSnake[count].coord.x, gSuperSnake[count].coord.y, G_SNAKE_SIZE, G_SNAKE_SIZE).attr("fill", "#000").attr("stroke", "#000");
+    }
+    
+    /*Place a random block on the canvas*/
+    generateBlock();
+    
+    function generateBlock()
+    {
+        randomLocation = 
+        {
+            coord: 
+            {
+                x: (Math.round((Math.floor(Math.random() * (G_CANVAS_SIZE - G_SNAKE_SIZE + 1))) / G_SNAKE_SIZE)) * G_SNAKE_SIZE,
+                y: (Math.round((Math.floor(Math.random() * (G_CANVAS_SIZE - G_SNAKE_SIZE + 1))) / G_SNAKE_SIZE)) * G_SNAKE_SIZE
+            }
+        };
+        
+        randomLocation.block = paper.rect(randomLocation.coord.x, randomLocation.coord.y, G_SNAKE_SIZE, G_SNAKE_SIZE).attr("fill", "#000").attr("stroke", "#000");
+    }
+    
+    /*Move snake */
+    function moveSnake()
+    {
+        key = event.keyCode;
+        //document.getElementById("Code").innerHTML = ;
+        
+        if (key == G_KEY.right || key == G_KEY.left || key == G_KEY.up || key == G_KEY.down) //Detecting a change in direction
+        {
+            gKey = key;
+            if (!gGameStarted) 
+            {
+                gGameStarted = true;
+                moveBody();
+            }
+        }
+    }
+    
+    function moveBody()
+    {
+        var i = 0;
+        while (i < gSuperSnake.length - 1) 
+        {
+            gSuperSnake[i].coord.y = gSuperSnake[i + 1].coord.y;
+            gSuperSnake[i].coord.x = gSuperSnake[i + 1].coord.x;
+            
+            gSuperSnake[i].snake.animate(
+            {
+                x: gSuperSnake[i].coord.x,
+                y: gSuperSnake[i].coord.y
+            }, gAnimateTime);
+            
+            i++;
+        }
+        moveHead();
+    }
+    
+    
+    function moveHead()
+    {
+        var headIndex = gSuperSnake.length - 1;
+        
+        if (gKey == G_KEY.right) //Right
+        {
+            gSuperSnake[headIndex].coord.x = gSuperSnake[headIndex].coord.x + G_SNAKE_SIZE;
+            if (gSuperSnake[headIndex].coord.x <= (G_CANVAS_SIZE - G_SNAKE_SIZE)) 
+            {
+                gSuperSnake[headIndex].snake.animate(
+                {
+                    x: gSuperSnake[headIndex].coord.x
+                }, gAnimateTime, function()
+                {
+                    grow(headIndex);
+                    moveBody();
+                });
+            }
+            else 
+                document.getElementById("Score").innerHTML = "GAME OVER!";
+            
+            
+        }
+        else 
+            if (gKey == G_KEY.up) //Up
+            {
+                gSuperSnake[headIndex].coord.y = gSuperSnake[headIndex].coord.y - G_SNAKE_SIZE;
+                
+                
+                if (gSuperSnake[headIndex].coord.y >= 0) 
+                {
+                    gSuperSnake[headIndex].snake.animate(
+                    {
+                        y: gSuperSnake[headIndex].coord.y
+                    }, gAnimateTime, function()
+                    {
+                        grow(headIndex);
+                        moveBody();
+                    });
+                }
+                else 
+                {
+                    document.getElementById("Score").innerHTML = "GAME OVER!";
+                }
+            }
+            else 
+                if (gKey == G_KEY.left) //Left
+                {
+                    gSuperSnake[headIndex].coord.x = gSuperSnake[headIndex].coord.x - G_SNAKE_SIZE;
+                    if (gSuperSnake[headIndex].coord.x >= 0) 
+                    {
+                        gSuperSnake[headIndex].snake.animate(
+                        {
+                            x: gSuperSnake[headIndex].coord.x
+                        }, gAnimateTime, function()
+                        {
+                            grow(headIndex);
+                            moveBody();
+                        });
+                    }
+                    else 
+                        document.getElementById("Score").innerHTML = "GAME OVER!";
+                }
+                else 
+                    if (gKey == G_KEY.down) //Down
+                    {
+                        gSuperSnake[headIndex].coord.y = gSuperSnake[headIndex].coord.y + G_SNAKE_SIZE;
+                        if (gSuperSnake[headIndex].coord.y < G_CANVAS_SIZE) 
+                        {
+                            gSuperSnake[headIndex].snake.animate(
+                            {
+                                y: gSuperSnake[headIndex].coord.y
+                            }, gAnimateTime, function()
+                            {
+                                grow(headIndex);
+                                moveBody();
+                            });
+                        }
+                        else 
+                        {
+                            document.getElementById("Code").innerHTML = gSuperSnake[headIndex].coord.y;
+                            document.getElementById("Score").innerHTML = "GAME OVER!";
+                        }
+                    }
+        
+    }
+    
+    function grow(headIndex)
+    {
+        if ((gSuperSnake[headIndex].coord.x == randomLocation.coord.x) &&
+        gSuperSnake[headIndex].coord.y == randomLocation.coord.y) 
+        {
+            // Display score
+            gScore = gScore + G_SCORE_INCREMENT;
+            document.getElementById("Score").innerHTML = "Score = " + gScore;
+            
+            //Grow gSuperSnake
+            gSuperSnake.push(
+            {
+                coord: 
+                {
+                    x: randomLocation.coord.x,
+                    y: randomLocation.coord.y
+                }
+            });
+            gSuperSnake[headIndex + 1].snake = paper.rect(gSuperSnake[headIndex + 1].coord.x, gSuperSnake[headIndex + 1].coord.y, G_SNAKE_SIZE, G_SNAKE_SIZE).attr("fill", "#000").attr("stroke", "#000");
+            
+            //Make snake faster
+            if (gAnimateTime >= G_SPEED_INCREASE) 
+            {
+                gAnimateTime = gAnimateTime - G_SPEED_INCREASE;
+            }
+            
+            //changeColour();
+            //Remove old block, generate new block
+            randomLocation.block.remove();
+            generateBlock();
+        }
+    }
+    
+    function changeColour()
+    {
+    
+    
+    }
+	  </script>
+  </body>
+</html>
