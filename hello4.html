@@ -2,9 +2,10 @@
   <head>
     <title>The Snake</title>
   <script language="JavaScript" src="raphael.js"> </script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.js"></script>
   </head>
-  <body onkeydown="moveSnake()">
-    <div id="snake"> 
+  <body >
+    <div id="snake" tabindex = 0> 
     </div>
     <p id="Score">
 	</p>
@@ -12,14 +13,23 @@
 	</p>
 	<p id="Code2">
 	</p>
-	<script language="JavaScript">
+	<script type="text/javascript">
+		//with jquery key down
+		
 		var G_CANVAS_SIZE = 400;
 		var G_SNAKE_SIZE = 10;
 		var G_SCORE_INCREMENT = 10;
 		var G_SPEED_INCREASE = 30;
-		var G_KEY = { right : 39, left : 37, up : 38, down : 40};
+		var G_COLOURS = ["#000066", "#00FF00", "#00FF99", "#660000", "#33FFFF", "#CCFF33", "#FF3333"];
+        var G_KEY = 
+        {
+            right: 39,
+            left: 37,
+            up: 38,
+            down: 40
+        };
 
-		var gKey, gScore = 0;
+		var gKey, gColourIndex, gScore = 0;
 		var gAnimateTime = 400;
 		var gGameStarted = false;
 
@@ -30,7 +40,7 @@
 		/*Initialise snake*/
 		var superSnake = [];
 		var randomLocation = new Object;
-
+		
 		superSnake.push({coord : {x : 0, y : G_CANVAS_SIZE - G_SNAKE_SIZE}}, 
 			{coord : {x : G_SNAKE_SIZE, y : G_CANVAS_SIZE - G_SNAKE_SIZE}},
 			{coord : {x : G_SNAKE_SIZE * 2, y : G_CANVAS_SIZE - G_SNAKE_SIZE}});
@@ -42,6 +52,23 @@
 				.attr("stroke", "#000");
 		}
 
+				/*Move snake */
+		$(document).keydown(function (e)
+		{		
+			var key = e.which;
+			document.getElementById("Code").innerHTML = key;
+			
+			if (key == G_KEY.right || key == G_KEY.left || key == G_KEY.up || key == G_KEY.down) //Detecting a change in direction
+			{
+				gKey = key;
+				if (!gGameStarted)
+				{
+					gGameStarted = true;
+					moveBody();
+				}	
+			}
+		});
+		
 		/*Place a random block on the canvas*/
 		generateBlock();
 				
@@ -59,22 +86,7 @@
 				.attr("stroke", "#000");
 		}
 		
-		/*Move snake */
-		function moveSnake()
-		{			
-			key = event.keyCode;
-			//document.getElementById("Code").innerHTML = ;
-			
-			if (key == G_KEY.right || key == G_KEY.left || key == G_KEY.up || key == G_KEY.down) //Detecting a change in direction
-			{
-				gKey = key;
-				if (!gGameStarted)
-				{
-					gGameStarted = true;
-					moveBody();
-				}	
-			}
-		}
+
 
 		function moveBody()
 		{
@@ -83,6 +95,9 @@
 			{					
 				superSnake[i].coord.y = superSnake[i + 1].coord.y;
 				superSnake[i].coord.x = superSnake[i + 1].coord.x;
+				
+				superSnake[i].snake.attr("fill", G_COLOURS[gColourIndex]);
+				superSnake[i].snake.attr("stroke", G_COLOURS[gColourIndex]);
 				
 				superSnake[i].snake.animate({x:superSnake[i].coord.x,y: superSnake[i].coord.y}, gAnimateTime);
 										
@@ -171,9 +186,11 @@
 					
 				//Grow superSnake
 				superSnake.push({coord : {x : randomLocation.coord.x, y : randomLocation.coord.y}});
+				
+				gColourIndex = Math.floor(Math.random() * 7);
 				superSnake[headIndex+1].snake = paper.rect(superSnake[headIndex+1].coord.x, superSnake[headIndex+1].coord.y, G_SNAKE_SIZE, G_SNAKE_SIZE)
-					.attr("fill", "#000")
-					.attr("stroke", "#000");
+					.attr("fill", G_COLOURS[gColourIndex])
+					.attr("stroke", G_COLOURS[gColourIndex]);
 				
 				//Make snake faster
 				if (gAnimateTime >= G_SPEED_INCREASE)
