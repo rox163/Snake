@@ -43,7 +43,11 @@
 		
 		superSnake.push({coord : {x : 0, y : G_CANVAS_SIZE - G_SNAKE_SIZE}}, 
 			{coord : {x : G_SNAKE_SIZE, y : G_CANVAS_SIZE - G_SNAKE_SIZE}},
-			{coord : {x : G_SNAKE_SIZE * 2, y : G_CANVAS_SIZE - G_SNAKE_SIZE}});
+			{coord : {x : G_SNAKE_SIZE * 2, y : G_CANVAS_SIZE - G_SNAKE_SIZE}},
+						{coord : {x : G_SNAKE_SIZE * 3, y : G_CANVAS_SIZE - G_SNAKE_SIZE}},
+									{coord : {x : G_SNAKE_SIZE *4, y : G_CANVAS_SIZE - G_SNAKE_SIZE}},
+												{coord : {x : G_SNAKE_SIZE * 5, y : G_CANVAS_SIZE - G_SNAKE_SIZE}},
+															{coord : {x : G_SNAKE_SIZE * 6, y : G_CANVAS_SIZE - G_SNAKE_SIZE}});
 
 		for (var count = 0;count < superSnake.length; count++)
 		{
@@ -90,12 +94,19 @@
 
 		function moveBody()
 		{
-			var i = 0;	
+			var i = 0;
+
 			while (i < superSnake.length-1)
 			{					
 				superSnake[i].coord.y = superSnake[i + 1].coord.y;
 				superSnake[i].coord.x = superSnake[i + 1].coord.x;
-				
+
+				var headIndex = superSnake.length - 1;
+				if (i !== headIndex && (i !== (headIndex - 1)) && superSnake[headIndex].coord.x == superSnake[i].coord.x && superSnake[headIndex].coord.y == superSnake[i].coord.y)
+				{
+					return;
+				}
+
 				superSnake[i].snake.attr("fill", G_COLOURS[gColourIndex]);
 				superSnake[i].snake.attr("stroke", G_COLOURS[gColourIndex]);
 				
@@ -105,8 +116,19 @@
 			}
 			moveHead();
 		}
-		
-		
+
+		function checkCollision() {
+			var headIndex = superSnake.length - 1;
+			var collisionDetected = false;
+			$.each(superSnake, function(index, snake) {
+				if (index != headIndex) {
+					collisionDetected = ((snake.coord.x == superSnake[headIndex].coord.x) && 
+						(snake.coord.y == superSnake[headIndex].coord.y))
+				}
+			});
+			return collisionDetected;
+		}
+
 		function moveHead()
 		{
 			var headIndex = superSnake.length - 1;
