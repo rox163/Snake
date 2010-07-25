@@ -11,7 +11,7 @@
 	</p>
 	<p id="Code">
 	</p>
-	<p id="Code2">
+	<p id="code2">
 	</p>
 	<script type="text/javascript">
 		//with jquery key down
@@ -75,7 +75,8 @@
 		generateBlock();
 				
 		function generateBlock()
-		{	
+		{
+			prevRandomLocation = randomLocation;
 			randomLocation = { 
 				coord : { 
 					x : (Math.round((Math.floor(Math.random() * (G_CANVAS_SIZE-G_SNAKE_SIZE + 1)))/G_SNAKE_SIZE)) * G_SNAKE_SIZE,
@@ -105,8 +106,8 @@
 				if (i !== headIndex && (i !== (headIndex - 1)) 
 					&& (gSuperSnake[headIndex].coord.x == gSuperSnake[i].coord.x 
 					&& gSuperSnake[headIndex].coord.y == gSuperSnake[i].coord.y)
-					&& (gSuperSnake[i].coord.x !== randomLocation.coord.x
-					&& gSuperSnake[i].coord.y !== randomLocation.coord.y))
+					&& (gSuperSnake[i].coord.x !== prevRandomLocation.coord.x
+					&& gSuperSnake[i].coord.y !== prevRandomLocation.coord.y))
 				{
 					return;
 				}
