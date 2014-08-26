@@ -2,7 +2,7 @@
   <head>
     <title>The Snake</title>
   <script language="JavaScript" src="raphael.js"> </script>
-  <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   </head>
   <body >
     <div id="snake" tabindex = 0> 
@@ -29,7 +29,8 @@
             down: 40
         };
 
-		var gKey, gColourIndex, gScore = 0;
+		var gKey, gScore, gSnakeColour = 0;
+        
 		var gAnimateTime = 400;
 		var gGameStarted = false;
 
@@ -65,6 +66,7 @@
 				gKey = key;
 				if (!gGameStarted)
 				{
+                    gSnakeColour = getRandomColour();
 					gGameStarted = true;
 					moveBody();
 				}	
@@ -73,7 +75,16 @@
 		
 		/*Place a random block on the canvas*/
 		generateBlock();
-				
+        
+		function getRandomColour() {
+            var letters = '789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++ ) {
+                color += letters[Math.floor(Math.random() * 6)];
+            }
+            return color;
+        }
+        
 		function generateBlock()
 		{
 			prevRandomLocation = randomLocation;
@@ -83,18 +94,15 @@
 					y : (Math.round((Math.floor(Math.random() * (G_CANVAS_SIZE-G_SNAKE_SIZE + 1)))/G_SNAKE_SIZE)) * G_SNAKE_SIZE 
 				}
 			};
-						
+			var colour = getRandomColour();			
 			randomLocation.block = paper.rect(randomLocation.coord.x, randomLocation.coord.y, G_SNAKE_SIZE, G_SNAKE_SIZE)
-				.attr("fill", "#000")
-				.attr("stroke", "#000");
+				.attr("fill", colour)
+				.attr("stroke", colour);
 		}
-		
-
 
 		function moveBody()
 		{
 			var i = 0;
-
 			while (i < gSuperSnake.length-1)
 			{					
 				gSuperSnake[i].coord.y = gSuperSnake[i + 1].coord.y;
@@ -111,17 +119,14 @@
 				{
 					return;
 				}
-
-				gSuperSnake[i].snake.attr("fill", G_COLOURS[gColourIndex]);
-				gSuperSnake[i].snake.attr("stroke", G_COLOURS[gColourIndex]);
+				gSuperSnake[i].snake.attr("fill", gSnakeColour);
+				gSuperSnake[i].snake.attr("stroke", gSnakeColour);
 				
-				gSuperSnake[i].snake.animate({x:gSuperSnake[i].coord.x,y: gSuperSnake[i].coord.y}, gAnimateTime);
-										
+				gSuperSnake[i].snake.animate({x:gSuperSnake[i].coord.x,y: gSuperSnake[i].coord.y}, gAnimateTime);	
 				i++;
 			}
 			moveHead();
 		}
-
 
 		function moveHead()
 		{
@@ -138,15 +143,11 @@
 					});
 				}
 				else
-					document.getElementById("Score").innerHTML = "GAME OVER!";
-					
-				
+					document.getElementById("Score").innerHTML = "GAME OVER!";				
 			}
 			else if (gKey == G_KEY.up)		//Up
 			{
-				gSuperSnake[headIndex].coord.y = gSuperSnake[headIndex].coord.y - G_SNAKE_SIZE;
-				
-				
+				gSuperSnake[headIndex].coord.y = gSuperSnake[headIndex].coord.y - G_SNAKE_SIZE;				
 				if (gSuperSnake[headIndex].coord.y >= 0)
 				{
 					gSuperSnake[headIndex].snake.animate({y: gSuperSnake[headIndex].coord.y}, gAnimateTime, function() {
@@ -203,10 +204,11 @@
 				//Grow gSuperSnake
 				gSuperSnake.push({coord : {x : randomLocation.coord.x, y : randomLocation.coord.y}});
 				
-				gColourIndex = Math.floor(Math.random() * 7);
+				//gColourIndex = Math.floor(Math.random() * 7);
+                gSnakeColour = getRandomColour();
 				gSuperSnake[headIndex+1].snake = paper.rect(gSuperSnake[headIndex+1].coord.x, gSuperSnake[headIndex+1].coord.y, G_SNAKE_SIZE, G_SNAKE_SIZE)
-					.attr("fill", G_COLOURS[gColourIndex])
-					.attr("stroke", G_COLOURS[gColourIndex]);
+					.attr("fill", gSnakeColour)
+					.attr("stroke", gSnakeColour);
 				
 				//Make snake faster
 				if (gAnimateTime >= G_SPEED_INCREASE)
