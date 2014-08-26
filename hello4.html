@@ -9,18 +9,14 @@
     </div>
     <p id="Score">
 	</p>
-	<p id="Code">
-	</p>
-	<p id="code2">
-	</p>
 	<script type="text/javascript">
 		//with jquery key down
 		
 		var G_CANVAS_SIZE = 400;
 		var G_SNAKE_SIZE = 10;
 		var G_SCORE_INCREMENT = 10;
-		var G_SPEED_INCREASE = 30;
-		var G_COLOURS = ["#000066", "#00FF00", "#00FF99", "#660000", "#33FFFF", "#CCFF33", "#FF3333"];
+		var G_SPEED_INCREASE = 40;
+		//var G_COLOURS = ["#000066", "#00FF00", "#00FF99", "#660000", "#33FFFF", "#CCFF33", "#FF3333"];
         var G_KEY = 
         {
             right: 39,
@@ -59,7 +55,6 @@
 		$(document).keydown(function (e)
 		{		
 			var key = e.which;
-			document.getElementById("Code").innerHTML = key;
 			
 			if (key == G_KEY.right || key == G_KEY.left || key == G_KEY.up || key == G_KEY.down) //Detecting a change in direction
 			{
@@ -131,65 +126,54 @@
 		function moveHead()
 		{
 			var headIndex = gSuperSnake.length - 1;
-			
-			if (gKey == G_KEY.right)		//Right
-			{
-				gSuperSnake[headIndex].coord.x = gSuperSnake[headIndex].coord.x + G_SNAKE_SIZE;
-				if (gSuperSnake[headIndex].coord.x <= (G_CANVAS_SIZE - G_SNAKE_SIZE))
-				{
-					gSuperSnake[headIndex].snake.animate({x: gSuperSnake[headIndex].coord.x}, gAnimateTime, function() {
-						grow(headIndex);
-						moveBody();
-					});
-				}
-				else
-					document.getElementById("Score").innerHTML = "GAME OVER!";				
-			}
-			else if (gKey == G_KEY.up)		//Up
-			{
-				gSuperSnake[headIndex].coord.y = gSuperSnake[headIndex].coord.y - G_SNAKE_SIZE;				
-				if (gSuperSnake[headIndex].coord.y >= 0)
-				{
-					gSuperSnake[headIndex].snake.animate({y: gSuperSnake[headIndex].coord.y}, gAnimateTime, function() {
-						grow(headIndex);
-						moveBody();
-					});
-				}	
-				else
-				{
-					document.getElementById("Score").innerHTML = "GAME OVER!";
-				}
-			}
-			else if (gKey == G_KEY.left)		//Left
-			{
-				gSuperSnake[headIndex].coord.x = gSuperSnake[headIndex].coord.x - G_SNAKE_SIZE;
-				if (gSuperSnake[headIndex].coord.x >= 0)
-				{
-					gSuperSnake[headIndex].snake.animate({x: gSuperSnake[headIndex].coord.x}, gAnimateTime, function() {
-						grow(headIndex);
-						moveBody();
-					});
-				}
-				else
-					document.getElementById("Score").innerHTML = "GAME OVER!";
-			}
-			else if (gKey == G_KEY.down)		//Down
-			{
-				gSuperSnake[headIndex].coord.y = gSuperSnake[headIndex].coord.y + G_SNAKE_SIZE;
-				if (gSuperSnake[headIndex].coord.y < G_CANVAS_SIZE )
-				{
-					gSuperSnake[headIndex].snake.animate({y: gSuperSnake[headIndex].coord.y}, gAnimateTime, function() {
-						grow(headIndex);
-						moveBody();
-					});
-				}
-				else
-				{
-					document.getElementById("Code").innerHTML = gSuperSnake[headIndex].coord.y;
-					document.getElementById("Score").innerHTML = "GAME OVER!";				
-				}
-			}
-			
+			switch(gKey) {
+                case G_KEY.right:
+                    gSuperSnake[headIndex].coord.x = gSuperSnake[headIndex].coord.x + G_SNAKE_SIZE;
+			    	if (gSuperSnake[headIndex].coord.x <= (G_CANVAS_SIZE - G_SNAKE_SIZE)) {
+				    	gSuperSnake[headIndex].snake.animate({x: gSuperSnake[headIndex].coord.x}, gAnimateTime, function() {
+					    	grow(headIndex);
+						    moveBody();
+					    });
+				    } else {
+					    document.getElementById("Score").innerHTML = "GAME OVER!";
+                    }
+                    break;
+                case G_KEY.up:
+                    gSuperSnake[headIndex].coord.y = gSuperSnake[headIndex].coord.y - G_SNAKE_SIZE;				
+				    if (gSuperSnake[headIndex].coord.y >= 0) {
+    					gSuperSnake[headIndex].snake.animate({y: gSuperSnake[headIndex].coord.y}, gAnimateTime, function() {
+	    					grow(headIndex);
+		    				moveBody();
+			    		});
+				    } else {
+					    document.getElementById("Score").innerHTML = "GAME OVER!";
+				    }
+                    break;
+                case G_KEY.left:
+                    gSuperSnake[headIndex].coord.x = gSuperSnake[headIndex].coord.x - G_SNAKE_SIZE;
+			    	if (gSuperSnake[headIndex].coord.x >= 0) {
+				    	gSuperSnake[headIndex].snake.animate({x: gSuperSnake[headIndex].coord.x}, gAnimateTime, function() {
+					    	grow(headIndex);
+						    moveBody();
+					    });
+				    } else {
+					    document.getElementById("Score").innerHTML = "GAME OVER!";
+                    }
+                    break;
+                case G_KEY.down:
+                    gSuperSnake[headIndex].coord.y = gSuperSnake[headIndex].coord.y + G_SNAKE_SIZE;
+			    	if (gSuperSnake[headIndex].coord.y < G_CANVAS_SIZE ) {
+			    		gSuperSnake[headIndex].snake.animate({y: gSuperSnake[headIndex].coord.y}, gAnimateTime, function() {
+			    			grow(headIndex);
+				    		moveBody();
+					    });
+				    } else {
+					    document.getElementById("Score").innerHTML = "GAME OVER!";
+				    }
+                    break;
+                default:
+                    break;
+            }
 		}
 		
 		function grow(headIndex)
